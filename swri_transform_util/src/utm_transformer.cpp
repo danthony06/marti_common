@@ -206,18 +206,54 @@ namespace swri_transform_util
 
   TransformImplPtr UtmToTfTransform::Inverse() const
   {
+    RCLCPP_ERROR(logger_, "DJA: Entering UtmToTfTransform::Inverse");
     tf2::Stamped<tf2::Transform> inverse_transform = GetStampedTransform();
     inverse_transform.setData(inverse_transform.inverse());
 
     geometry_msgs::msg::TransformStamped inverse_tf_msg;
     inverse_tf_msg.header.frame_id = transform_.child_frame_id;
     inverse_tf_msg.child_frame_id = transform_.header.frame_id;
+
+    auto origin = inverse_transform.getOrigin();
+    auto orientation = inverse_transform.getRotation();
+    RCLCPP_ERROR(
+      logger_,
+      "DJA Frames: %s, %s",
+      inverse_tf_msg.header.frame_id.c_str(),
+      inverse_tf_msg.child_frame_id.c_str());
+    RCLCPP_ERROR(
+      logger_,
+      "DJA Inverse Origin: %f, %f, %f",
+      origin.x(),
+      origin.y(),
+      origin.z());
+
+    RCLCPP_ERROR(
+      logger_,
+      "DJA Inverse Orientation: %f, %f, %f, %f",
+      orientation.x(),
+      orientation.y(),
+      orientation.z(),
+      orientation.w());
+
+
+
+
+
     TransformImplPtr inverse = std::make_shared<TfToUtmTransform>(
         inverse_tf_msg,
         utm_util_,
         local_xy_util_,
         utm_zone_,
         utm_band_);
+
+    auto xform_origin = inverse->GetOrigin();
+    auto xform_orientation = inverse->GetOrientation();
+    RCLCPP_ERROR(logger_, "DJA Xform Inverse Origin: %f, %f, %f", xform_origin.x(), xform_origin.y(), xform_origin.z());
+    RCLCPP_ERROR(logger_, "DJA Xform Inverse Orientation: %f, %f, %f, %f", xform_orientation.x(), xform_orientation.y(), xform_orientation.z(), xform_orientation.w());
+
+
+    RCLCPP_ERROR(logger_, "DJA: Leaving UtmToTfTransform::Inverse");
     return inverse;
   }
 

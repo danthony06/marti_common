@@ -118,6 +118,12 @@ namespace swri_transform_util
     virtual void Transform(
       const tf2::Vector3& v_in, tf2::Vector3& v_out) const = 0;
 
+    virtual tf2::Vector3 GetOrigin() const
+    {
+      tf2::Vector3 origin(0, 0, 0);
+      return origin;
+    }
+
     /**
      * Get the orientation of this transform
      *
@@ -324,6 +330,8 @@ namespace swri_transform_util
      * @param[out] v_out Transformed vector
      */
     void Transform(const tf2::Vector3& v_in, tf2::Vector3& v_out) const override;
+
+    tf2::Vector3 GetOrigin() const override;
 
     /**
      * Get the orientation component of this transform using TF

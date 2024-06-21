@@ -314,6 +314,7 @@ TEST_F(TransformManagerTests, TfToUtm2)
 
 TEST_F(TransformManagerTests, UtmToTf1)
 {
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Entering UtmToTf1");
   // Local Origin
   tf2::Vector3 utm(537460.3372816057, 3258123.434110421, 0);
 
@@ -332,10 +333,12 @@ TEST_F(TransformManagerTests, UtmToTf1)
   tf2::Vector3 p3 = inverse * tf;
   EXPECT_NEAR(utm.x(), p3.x(), 0.00000001);
   EXPECT_NEAR(utm.y(), p3.y(), 0.00000001);
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Leaving UtmToTf1");
 }
 
 TEST_F(TransformManagerTests, UtmToTf2)
 {
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Entering UtmToTf2");
   // Local Origin
   tf2::Vector3 utm(537460.3372816057, 3258123.434110421, 0);
 
@@ -345,15 +348,28 @@ TEST_F(TransformManagerTests, UtmToTf2)
       swri_transform_util::_utm_frame,
       transform));
 
+    tf2::Vector3 origin = transform.GetOrigin();
+    tf2::Quaternion orientation = transform.GetOrientation();
+    RCLCPP_ERROR(_node->get_logger(), "DJA: Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+    RCLCPP_ERROR(_node->get_logger(), "DJA: Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+
   tf2::Vector3 tf = transform * utm;
+  RCLCPP_ERROR(_node->get_logger(), "DJA: tf: %f, %f, %f", tf.x(), tf.y(), tf.z());
 
   EXPECT_NEAR(-500, tf.x(), 0.0005);
   EXPECT_NEAR(-500, tf.y(), 0.0005);
 
   swri_transform_util::Transform inverse = transform.Inverse();
+  origin = inverse.GetOrigin();
+  orientation = inverse.GetOrientation();
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Inverse Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Inverse Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+
   tf2::Vector3 p3 = inverse * tf;
+  RCLCPP_ERROR(_node->get_logger(), "DJA: p3: %f, %f, %f", p3.x(), p3.y(), p3.z());
   EXPECT_NEAR(utm.x(), p3.x(), 0.00000001);
   EXPECT_NEAR(utm.y(), p3.y(), 0.00000001);
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Leaving UtmToTf2");
 }
 
 TEST_F(TransformManagerTests, UtmToTf3)
