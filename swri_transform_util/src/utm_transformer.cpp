@@ -198,6 +198,7 @@ namespace swri_transform_util
 
   TransformImplPtr UtmToTfTransform::Inverse() const
   {
+    ROS_ERROR("DJA: Entering UtmToTfTransform::Inverse");
     tf::StampedTransform inverse_transform = transform_;
     inverse_transform.setData(transform_.inverse());
     inverse_transform.frame_id_ = transform_.child_frame_id_;
@@ -206,8 +207,8 @@ namespace swri_transform_util
     auto origin = inverse_transform.getOrigin();
     auto orientation = inverse_transform.getRotation();
     ROS_ERROR("DJA Frames: %s, %s", inverse_transform.frame_id_.c_str(), inverse_transform.child_frame_id_.c_str());
-    ROS_ERROR("DJA Inverse: %f, %f, %f", origin.x(), origin.y(), origin.z());
-    ROS_ERROR("DJA Inverse: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+    ROS_ERROR("DJA Inverse Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+    ROS_ERROR("DJA Inverse Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
 
     TransformImplPtr inverse = boost::make_shared<TfToUtmTransform>(
         inverse_transform,
@@ -219,10 +220,11 @@ namespace swri_transform_util
 
     auto xform_origin = inverse->GetOrigin();
     auto xform_orientation = inverse->GetOrientation();
-    ROS_ERROR("DJA Inverse: %f, %f, %f", xform_origin.x(), xform_origin.y(), xform_origin.z());
-    ROS_ERROR("DJA Inverse: %f, %f, %f, %f", xform_orientation.x(), xform_orientation.y(), xform_orientation.z(), xform_orientation.w());
+    ROS_ERROR("DJA Xform Inverse Origin: %f, %f, %f", xform_origin.x(), xform_origin.y(), xform_origin.z());
+    ROS_ERROR("DJA Xform Inverse Orientation: %f, %f, %f, %f", xform_orientation.x(), xform_orientation.y(), xform_orientation.z(), xform_orientation.w());
 
 
+    ROS_ERROR("DJA: Leaving UtmToTfTransform::Inverse");
     return inverse;
   }
 

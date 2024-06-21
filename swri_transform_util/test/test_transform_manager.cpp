@@ -286,6 +286,7 @@ TEST(TransformManagerTests, TfToUtm2)
 
 TEST(TransformManagerTests, UtmToTf1)
 {
+  ROS_ERROR("DJA: Entering UtmToTf1");
   // Local Origin
   tf::Vector3 utm(537460.3372816057, 3258123.434110421, 0);
 
@@ -304,10 +305,12 @@ TEST(TransformManagerTests, UtmToTf1)
   tf::Vector3 p3 = inverse * tf;
   EXPECT_NEAR(utm.x(), p3.x(), 0.00000001);
   EXPECT_NEAR(utm.y(), p3.y(), 0.00000001);
+  ROS_ERROR("DJA: Leaving UtmToTf1");
 }
 
 TEST(TransformManagerTests, UtmToTf2)
 {
+  ROS_ERROR("DJA: Entering UtmToTf2");
   // Local Origin
   tf::Vector3 utm(537460.3372816057, 3258123.434110421, 0);
 
@@ -335,6 +338,7 @@ TEST(TransformManagerTests, UtmToTf2)
   ROS_ERROR("DJA: p3: %f, %f, %f", p3.x(), p3.y(), p3.z());
   EXPECT_NEAR(utm.x(), p3.x(), 0.00000001);
   EXPECT_NEAR(utm.y(), p3.y(), 0.00000001);
+  ROS_ERROR("DJA: Leaving UtmToTf2");
 }
 
 TEST(TransformManagerTests, UtmToTf3)
