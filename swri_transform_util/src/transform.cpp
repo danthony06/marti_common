@@ -146,6 +146,12 @@ namespace swri_transform_util
     v_out = transform_ * v_in;
   }
   
+
+  tf::Vector3 TfTransform::GetOrigin() const
+  {
+  return transform_.getOrigin();
+  }  
+
   tf::Quaternion TfTransform::GetOrientation() const
   {
     return transform_.getRotation();

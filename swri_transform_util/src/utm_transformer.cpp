@@ -202,6 +202,13 @@ namespace swri_transform_util
     inverse_transform.setData(transform_.inverse());
     inverse_transform.frame_id_ = transform_.child_frame_id_;
     inverse_transform.child_frame_id_ = transform_.frame_id_;
+
+    auto origin = inverse_transform.getOrigin();
+    auto orientation = inverse_transform.getRotation();
+    ROS_ERROR("DJA Frames: %s, %s", inverse_transform.frame_id_.c_str(), inverse_transform.child_frame_id_.c_str());
+    ROS_ERROR("DJA Inverse: %f, %f, %f", origin.x(), origin.y(), origin.z());
+    ROS_ERROR("DJA Inverse: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+
     TransformImplPtr inverse = boost::make_shared<TfToUtmTransform>(
         inverse_transform,
         utm_util_,
@@ -209,6 +216,13 @@ namespace swri_transform_util
         utm_zone_,
         utm_band_);
     inverse->stamp_ = stamp_;
+
+    auto xform_origin = inverse->GetOrigin();
+    auto xform_orientation = inverse->GetOrientation();
+    ROS_ERROR("DJA Inverse: %f, %f, %f", xform_origin.x(), xform_origin.y(), xform_origin.z());
+    ROS_ERROR("DJA Inverse: %f, %f, %f, %f", xform_orientation.x(), xform_orientation.y(), xform_orientation.z(), xform_orientation.w());
+
+
     return inverse;
   }
 

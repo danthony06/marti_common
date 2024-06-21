@@ -316,14 +316,23 @@ TEST(TransformManagerTests, UtmToTf2)
       "/near_field",
       swri_transform_util::_utm_frame,
       transform));
-
+  tf::Vector3 origin = transform.GetOrigin();
+  tf::Quaternion orientation = transform.GetOrientation();
+  ROS_ERROR("DJA: Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+  ROS_ERROR("DJA: Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
   tf::Vector3 tf = transform * utm;
+  ROS_ERROR("DJA: tf: %f, %f, %f", tf.x(), tf.y(), tf.z());
 
   EXPECT_NEAR(-500, tf.x(), 0.0005);
   EXPECT_NEAR(-500, tf.y(), 0.0005);
 
   swri_transform_util::Transform inverse = transform.Inverse();
+  origin = inverse.GetOrigin();
+  orientation = inverse.GetOrientation();
+  ROS_ERROR("DJA: Inverse Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+  ROS_ERROR("DJA: Inverse Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
   tf::Vector3 p3 = inverse * tf;
+  ROS_ERROR("DJA: p3: %f, %f, %f", p3.x(), p3.y(), p3.z());
   EXPECT_NEAR(utm.x(), p3.x(), 0.00000001);
   EXPECT_NEAR(utm.y(), p3.y(), 0.00000001);
 }
