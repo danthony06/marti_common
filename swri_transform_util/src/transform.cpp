@@ -149,7 +149,7 @@ namespace swri_transform_util
 
   tf::Vector3 TfTransform::GetOrigin() const
   {
-  return transform_.getOrigin();
+    return transform_.getOrigin();
   }  
 
   tf::Quaternion TfTransform::GetOrientation() const
