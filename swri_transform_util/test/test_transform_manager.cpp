@@ -338,7 +338,7 @@ TEST_F(TransformManagerTests, UtmToTf1)
 
 TEST_F(TransformManagerTests, UtmToTf2)
 {
-  RCLCPP_ERROR(_node->get_logger(), "DJA: Entering UtmToTf2");
+  RCLCPP_ERROR(_node->get_logger(), "\n\n\n\nDJA: Entering UtmToTf2");
   // Local Origin
   tf2::Vector3 utm(537460.3372816057, 3258123.434110421, 0);
 
@@ -348,28 +348,32 @@ TEST_F(TransformManagerTests, UtmToTf2)
       swri_transform_util::_utm_frame,
       transform));
 
-    tf2::Vector3 origin = transform.GetOrigin();
-    tf2::Quaternion orientation = transform.GetOrientation();
-    RCLCPP_ERROR(_node->get_logger(), "DJA: Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
-    RCLCPP_ERROR(_node->get_logger(), "DJA: Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+  tf2::Vector3 origin = transform.GetOrigin();
+  tf2::Quaternion orientation = transform.GetOrientation();
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Test Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Test Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
 
   tf2::Vector3 tf = transform * utm;
-  RCLCPP_ERROR(_node->get_logger(), "DJA: tf: %f, %f, %f", tf.x(), tf.y(), tf.z());
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Test tf: %f, %f, %f", tf.x(), tf.y(), tf.z());
 
   EXPECT_NEAR(-500, tf.x(), 0.0005);
   EXPECT_NEAR(-500, tf.y(), 0.0005);
 
+  auto before_inverse_origin = transform.GetOrigin();
+  auto before_inverse_orientation = transform.GetOrientation();
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Test Before Inverse Origin: %f, %f, %f", before_inverse_origin.x(), before_inverse_origin.y(), before_inverse_origin.z());
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Test Before Inverse Orientation: %f, %f, %f, %f", before_inverse_orientation.x(), before_inverse_orientation.y(), before_inverse_orientation.z(), before_inverse_orientation.w());
   swri_transform_util::Transform inverse = transform.Inverse();
-  origin = inverse.GetOrigin();
-  orientation = inverse.GetOrientation();
-  RCLCPP_ERROR(_node->get_logger(), "DJA: Inverse Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
-  RCLCPP_ERROR(_node->get_logger(), "DJA: Inverse Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+  auto inverse_origin = inverse.GetOrigin();
+  auto inverse_orientation = inverse.GetOrientation();
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Test Inverse Origin: %f, %f, %f", inverse_origin.x(), inverse_origin.y(), inverse_origin.z());
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Test Inverse Orientation: %f, %f, %f, %f", inverse_orientation.x(), inverse_orientation.y(), inverse_orientation.z(), inverse_orientation.w());
 
   tf2::Vector3 p3 = inverse * tf;
-  RCLCPP_ERROR(_node->get_logger(), "DJA: p3: %f, %f, %f", p3.x(), p3.y(), p3.z());
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Test p3: %f, %f, %f", p3.x(), p3.y(), p3.z());
   EXPECT_NEAR(utm.x(), p3.x(), 0.00000001);
   EXPECT_NEAR(utm.y(), p3.y(), 0.00000001);
-  RCLCPP_ERROR(_node->get_logger(), "DJA: Leaving UtmToTf2");
+  RCLCPP_ERROR(_node->get_logger(), "DJA: Leaving UtmToTf2\n\n\n\n");
 }
 
 TEST_F(TransformManagerTests, UtmToTf3)

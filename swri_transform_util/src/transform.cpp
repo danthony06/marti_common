@@ -36,21 +36,29 @@ namespace swri_transform_util
   Transform::Transform() :
     transform_(std::make_shared<IdentityTransform>())
   {
+    auto logger = rclcpp::get_logger("Transform::Inverse");
+    RCLCPP_ERROR(logger, "DJA: Making Identity Transform");
   }
 
   Transform::Transform(const tf2::Transform& transform) :
     transform_(std::make_shared<TfTransform>(transform))
   {
+    auto logger = rclcpp::get_logger("Transform::Inverse");
+    RCLCPP_ERROR(logger, "DJA: Making TfTransform Transform");
   }
   
   Transform::Transform(const tf2::Stamped<tf2::Transform>& transform) :
     transform_(std::make_shared<TfTransform>(transform))
   {
+    auto logger = rclcpp::get_logger("Transform::Inverse");
+    RCLCPP_ERROR(logger, "DJA: Making Stamped Transform");
   }
 
   Transform::Transform(std::shared_ptr<TransformImpl> transform) :
     transform_(transform)
   {
+    auto logger = rclcpp::get_logger("Transform::Inverse");
+    RCLCPP_ERROR(logger, "DJA: Making Pointer Transform");
   }
 
   Transform& Transform::operator=(const tf2::Transform transform)
@@ -106,7 +114,29 @@ namespace swri_transform_util
 
   Transform Transform::Inverse() const
   {
-    return Transform(transform_->Inverse());
+    auto logger = rclcpp::get_logger("Transform::Inverse");
+    RCLCPP_ERROR(logger, "DJA: Entering Transform::Inverse");
+
+    auto inverse_origin = transform_->GetOrigin();
+    auto inverse_orientation = transform_->GetOrientation();
+    RCLCPP_ERROR(logger, "DJA Transform::Inverse Start Origin: %f, %f, %f",
+      inverse_origin.x(), inverse_origin.y(), inverse_origin.z());
+    RCLCPP_ERROR(logger, "DJA Transform::Inverse Start Orientation: %f, %f, %f, %f",
+      inverse_orientation.x(), inverse_orientation.y(), inverse_orientation.z(), inverse_orientation.w());
+
+    auto inverse_xform = transform_->Inverse();
+    auto origin = inverse_xform->GetOrigin();
+    auto orientation = inverse_xform->GetOrientation();
+    RCLCPP_ERROR(logger, "DJA Transform::Inverse Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+    RCLCPP_ERROR(logger, "DJA Transform::Inverse Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+
+    auto ret_xform = Transform(inverse_xform);
+    auto ret_origin = ret_xform.GetOrigin();
+    auto ret_orientation = ret_xform.GetOrientation();
+    RCLCPP_ERROR(logger, "DJA Transform::Inverse Ret Origin: %f, %f, %f", ret_origin.x(), ret_origin.y(), ret_origin.z());
+    RCLCPP_ERROR(logger, "DJA Transform::Inverse Ret Orientation: %f, %f, %f, %f", ret_orientation.x(), ret_orientation.y(), ret_orientation.z(), ret_orientation.w());
+    RCLCPP_ERROR(logger, "DJA: Leaving Transform::Inverse");
+    return ret_xform;
   }
 
   tf2::Transform Transform::GetTF() const
