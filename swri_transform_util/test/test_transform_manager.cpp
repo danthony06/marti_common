@@ -310,7 +310,7 @@ TEST(TransformManagerTests, UtmToTf1)
 
 TEST(TransformManagerTests, UtmToTf2)
 {
-  ROS_ERROR("DJA: Entering UtmToTf2");
+  ROS_ERROR("\n\n\n\nDJA: Entering UtmToTf2");
   // Local Origin
   tf::Vector3 utm(537460.3372816057, 3258123.434110421, 0);
 
@@ -321,24 +321,29 @@ TEST(TransformManagerTests, UtmToTf2)
       transform));
   tf::Vector3 origin = transform.GetOrigin();
   tf::Quaternion orientation = transform.GetOrientation();
-  ROS_ERROR("DJA: Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
-  ROS_ERROR("DJA: Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+  ROS_ERROR("DJA: Test Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+  ROS_ERROR("DJA: Test Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
   tf::Vector3 tf = transform * utm;
-  ROS_ERROR("DJA: tf: %f, %f, %f", tf.x(), tf.y(), tf.z());
+  ROS_ERROR("DJA: Test tf: %f, %f, %f", tf.x(), tf.y(), tf.z());
 
   EXPECT_NEAR(-500, tf.x(), 0.0005);
   EXPECT_NEAR(-500, tf.y(), 0.0005);
 
+  auto before_inverse_origin = transform.GetOrigin();
+  auto before_inverse_orientation = transform.GetOrientation();
+  ROS_ERROR("DJA: Test Before Inverse Origin: %f, %f, %f", before_inverse_origin.x(), before_inverse_origin.y(), before_inverse_origin.z());
+  ROS_ERROR("DJA: Test Before Inverse Orientation: %f, %f, %f, %f", before_inverse_orientation.x(), before_inverse_orientation.y(), before_inverse_orientation.z(), before_inverse_orientation.w());
+
   swri_transform_util::Transform inverse = transform.Inverse();
   origin = inverse.GetOrigin();
   orientation = inverse.GetOrientation();
-  ROS_ERROR("DJA: Inverse Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
-  ROS_ERROR("DJA: Inverse Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+  ROS_ERROR("DJA: Test Inverse Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+  ROS_ERROR("DJA: Test Inverse Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
   tf::Vector3 p3 = inverse * tf;
-  ROS_ERROR("DJA: p3: %f, %f, %f", p3.x(), p3.y(), p3.z());
+  ROS_ERROR("DJA: Test p3: %f, %f, %f", p3.x(), p3.y(), p3.z());
   EXPECT_NEAR(utm.x(), p3.x(), 0.00000001);
   EXPECT_NEAR(utm.y(), p3.y(), 0.00000001);
-  ROS_ERROR("DJA: Leaving UtmToTf2");
+  ROS_ERROR("DJA: Leaving UtmToTf2\n\n\n\n");
 }
 
 TEST(TransformManagerTests, UtmToTf3)

@@ -36,21 +36,25 @@ namespace swri_transform_util
   Transform::Transform() :
     transform_(boost::make_shared<IdentityTransform>())
   {
+    ROS_ERROR("DJA: Making Identity Transform");
   }
 
   Transform::Transform(const tf::Transform& transform) :
     transform_(boost::make_shared<TfTransform>(transform))
   {
+    ROS_ERROR("DJA: Making TfTransform Transform");
   }
   
   Transform::Transform(const tf::StampedTransform& transform) :
     transform_(boost::make_shared<TfTransform>(transform))
   {
+    ROS_ERROR("DJA: Making Stamped Transform");
   }
 
   Transform::Transform(boost::shared_ptr<TransformImpl> transform) :
     transform_(transform)
   {
+    ROS_ERROR("DJA: Making Pointer Transform");
   }
 
   Transform& Transform::operator=(const tf::Transform transform)
@@ -108,7 +112,31 @@ namespace swri_transform_util
 
   Transform Transform::Inverse() const
   {
-    return Transform(transform_->Inverse());
+    ROS_ERROR("DJA: Entering Transform::Inverse");
+
+    auto inverse_origin = transform_->GetOrigin();
+    auto inverse_orientation = transform_->GetOrientation();
+    ROS_ERROR("DJA Transform::Inverse Start Origin: %f, %f, %f",
+      inverse_origin.x(), inverse_origin.y(), inverse_origin.z());
+    ROS_ERROR("DJA Transform::Inverse Start Orientation: %f, %f, %f, %f",
+      inverse_orientation.x(), inverse_orientation.y(), inverse_orientation.z(), inverse_orientation.w());
+
+    auto inverse_xform = transform_->Inverse();
+
+    auto origin = inverse_xform->GetOrigin();
+    auto orientation = inverse_xform->GetOrientation();
+    ROS_ERROR("DJA Transform::Inverse Origin: %f, %f, %f", origin.x(), origin.y(), origin.z());
+    ROS_ERROR("DJA Transform::Inverse Orientation: %f, %f, %f, %f", orientation.x(), orientation.y(), orientation.z(), orientation.w());
+  
+    auto ret_xform = Transform(inverse_xform);
+
+    auto ret_origin = ret_xform.GetOrigin();
+    auto ret_orientation = ret_xform.GetOrientation();
+    ROS_ERROR("DJA Transform::Inverse Ret Origin: %f, %f, %f", ret_origin.x(), ret_origin.y(), ret_origin.z());
+    ROS_ERROR("DJA Transform::Inverse Ret Orientation: %f, %f, %f, %f", ret_orientation.x(), ret_orientation.y(), ret_orientation.z(), ret_orientation.w());
+    ROS_ERROR("DJA: Leaving Transform::Inverse");
+
+    return ret_xform;
   }
 
   tf::Transform Transform::GetTF() const
@@ -159,9 +187,11 @@ namespace swri_transform_util
 
   TransformImplPtr TfTransform::Inverse() const
   {
+    ROS_ERROR("DJA: Entering TfTransform::Inverse");
     TransformImplPtr inverse = 
         boost::make_shared<TfTransform>(transform_.inverse());
     inverse->stamp_ = stamp_;
+    ROS_ERROR("DJA: Leaving TfTransform::Inverse");
     return inverse;
   }
 }
