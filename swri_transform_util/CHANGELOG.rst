@@ -2,8 +2,8 @@
 Changelog for package swri_transform_util
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+3.8.8 (2026-05-06)
+------------------
 * Adding exception handling around the node spinning so it gracefully handles shutdown (`#788 <https://github.com/swri-robotics/marti_common/issues/788>`_)
 * Contributors: David Anthony
 
