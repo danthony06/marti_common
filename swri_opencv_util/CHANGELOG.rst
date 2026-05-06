@@ -304,8 +304,6 @@ Changelog for package swri_opencv_util
 
 0.0.6 (2015-11-17)
 ------------------
-  Conflicts:
-  swri_geometry_util/CMakeLists.txt
 * Contributors: Kim Mathiassen
 
 0.0.5 (2015-09-27)
