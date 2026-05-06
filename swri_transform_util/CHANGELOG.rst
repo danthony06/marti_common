@@ -2,6 +2,11 @@
 Changelog for package swri_transform_util
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Adding exception handling around the node spinning so it gracefully handles shutdown (`#788 <https://github.com/swri-robotics/marti_common/issues/788>`_)
+* Contributors: David Anthony
+
 3.8.7 (2025-07-18)
 ------------------
 * Add a check for the modern CMake yaml-cpp target - if it does not exist, fall back to YAML_CPP_LIBRARIES (`#785 <https://github.com/swri-robotics/marti_common/issues/785>`_)
