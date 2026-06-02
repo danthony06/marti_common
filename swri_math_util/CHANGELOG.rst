@@ -2,6 +2,14 @@
 Changelog for package swri_math_util
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Lyrical Update (`#789 <https://github.com/swri-robotics/marti_common/issues/789>`_)
+  * Removing deprecated headers
+  * Fixing logger warning usage
+  * Fixing PROJ compatibility
+* Contributors: David Anthony
+
 3.8.8 (2026-05-06)
 ------------------
 
