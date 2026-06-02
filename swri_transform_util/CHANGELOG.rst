@@ -2,8 +2,8 @@
 Changelog for package swri_transform_util
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+3.9.0 (2026-06-02)
+------------------
 * Lyrical Update (`#789 <https://github.com/swri-robotics/marti_common/issues/789>`_)
   * Removing deprecated headers
   * Fixing logger warning usage
