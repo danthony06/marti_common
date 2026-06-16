@@ -16,7 +16,6 @@ find_package(rcl_interfaces REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(swri_math_util REQUIRED)
-find_package(swri_roscpp REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
@@ -70,8 +69,7 @@ target_include_directories(${PROJECT_NAME}
     $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
   INTERFACE
     ${PROJ_INCLUDE_DIRS}
-  PRIVATE
-    ${swri_roscpp_TARGETS})
+)
 
 target_compile_definitions(${PROJECT_NAME}
   PUBLIC
@@ -126,7 +124,7 @@ target_link_libraries(${PROJECT_NAME}_nodes
   ${rcl_interfaces_TARGETS}
   ${rclcpp_components_TARGETS}
   ${marti_nav_msgs_TARGETS}
-  ${swri_roscpp_TARGETS})
+)
 
 add_executable(lat_lon_tf_echo src/nodes/lat_lon_tf_echo.cpp)
 target_include_directories(lat_lon_tf_echo PUBLIC

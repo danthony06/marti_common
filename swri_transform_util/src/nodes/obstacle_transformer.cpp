@@ -14,9 +14,6 @@
 #include <marti_nav_msgs/msg/obstacle.hpp>
 #include <marti_nav_msgs/msg/obstacle_array.hpp>
 
-#include <swri_roscpp/publisher.h>
-#include <swri_roscpp/subscriber.h>
-
 #include <swri_transform_util/transform_manager.h>
 
 namespace swri_transform_util
@@ -31,13 +28,12 @@ class ObstacleTransformer : public rclcpp::Node
 
       output_frame_ = this->get_parameter("output_frame").as_string();
 
-      object_array_sub_ = swri::Subscriber(*this,
-                                           "object_array",
-                                           1,
-                                           &ObstacleTransformer::handleObstacleArray,
-                                           this);
+      object_array_sub_ = this->create_subscription<marti_nav_msgs::msg::ObstacleArray>(
+        "object_array",
+        1,
+        std::bind(&ObstacleTransformer::handleObstacleArray, this, std::placeholders::_1));
 
-      viz_pub_ = swri::advertise<marti_nav_msgs::msg::ObstacleArray>(*this, "viz_array", 1);
+      viz_pub_ = this->create_publisher<marti_nav_msgs::msg::ObstacleArray>("viz_array", 1);
     }
 
   private:
@@ -94,7 +90,7 @@ class ObstacleTransformer : public rclcpp::Node
       viz_pub_->publish(std::move(obstacles));
     }
     
-    swri::Subscriber object_array_sub_;
+    rclcpp::Subscription<marti_nav_msgs::msg::ObstacleArray>::SharedPtr object_array_sub_;
     rclcpp::Publisher<marti_nav_msgs::msg::ObstacleArray>::SharedPtr viz_pub_;
 
     // parameters
