@@ -266,16 +266,35 @@ bool projectOntoRoute(mnm::msg::RoutePosition &position,
   // the search while allowing the segment to be extrapolated
   // backward or forward, respectively.  This allows graceful
   // operation if the vehicle is past the boundary of the route.
+  //
+  // These two cases are not mutually exclusive: for a single-segment
+  // route the first and last segment are the same segment, so a point
+  // past the end also satisfies min_segment_index == 0.  We only let
+  // the before-start case claim the point when it actually projects
+  // before the start (a negative distance along the segment), and
+  // otherwise fall through to the past-end handling.  Treating them as
+  // an if/else would clamp a past-the-end point to the last vertex and
+  // return a non-normalized position on single-segment routes.
 
+  bool handled_before_start = false;
   if (extrapolate_before_start && min_segment_index == 0) {
-    size_t i = 0;
-    nearestDistanceToLineSegment(min_distance_from_line,
-                                 min_distance_on_line,
-                                 route.points[i+0].position(),
-                                 route.points[i+1].position(),
+    double distance_from_line;
+    double distance_on_line;
+    nearestDistanceToLineSegment(distance_from_line,
+                                 distance_on_line,
+                                 route.points[0].position(),
+                                 route.points[1].position(),
                                  point,
                                  true, false);
-  } else if (min_segment_index + 2 == route.points.size()) {
+    if (distance_on_line < 0.0) {
+      min_distance_from_line = distance_from_line;
+      min_distance_on_line = distance_on_line;
+      min_segment_index = 0;
+      handled_before_start = true;
+    }
+  }
+
+  if (!handled_before_start && min_segment_index + 2 == route.points.size()) {
     // The end of the route is a special case.  If we go past the end,
     // we want to return a position with the id of the last point and
     // the distance past it.  This annoying complicates things in a
