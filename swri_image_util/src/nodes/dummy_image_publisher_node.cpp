@@ -1,6 +1,6 @@
 // *****************************************************************************
 //
-// Copyright (c) 2014, Southwest Research Institute® (SwRI®)
+// Copyright (c) 2026, Southwest Research Institute® (SwRI®)
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,9 @@ namespace swri_image_util
   public:
     DummyImagePublisherNode(const rclcpp::NodeOptions& options) :
         rclcpp::Node("dummy_image_publisher", options)
+#ifndef USE_LEGACY_IMAGE_TRANSPORT_API
+        , it_(image_transport::RequiredInterfaces{*this})
+#endif
     {
       rcl_interfaces::msg::ParameterDescriptor desc;
       desc.type = rcl_interfaces::msg::ParameterType::PARAMETER_STRING;
@@ -56,6 +59,11 @@ namespace swri_image_util
       desc.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
       desc.read_only = true;
       this->declare_parameter("rate", 10.0, desc);
+#ifdef USE_LEGACY_IMAGE_TRANSPORT_API
+      image_pub_ = image_transport::create_publisher(this, "image");
+#else
+      image_pub_ = it_.advertise("image", 1);
+#endif
 
       auto publisher = [this]() -> void
       {
@@ -73,16 +81,14 @@ namespace swri_image_util
         image_pub_.publish(std::move(image));
       };
 
-      rmw_qos_profile_t qos;
-      qos.depth = 100;
-      image_pub_ = image_transport::create_publisher(this, "image", qos);
-
       timer_ = this->create_wall_timer(std::chrono::duration<float>(1.0 / this->get_parameter("rate").as_double()), publisher);
     }
 
   private:
     image_transport::Publisher image_pub_;
-
+#ifndef USE_LEGACY_IMAGE_TRANSPORT_API
+    image_transport::ImageTransport it_;
+#endif
     rclcpp::TimerBase::SharedPtr timer_;
   };
 }

@@ -16,7 +16,6 @@ find_package(rcl_interfaces REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(swri_math_util REQUIRED)
-find_package(swri_roscpp REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
@@ -70,8 +69,7 @@ target_include_directories(${PROJECT_NAME}
     $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
   INTERFACE
     ${PROJ_INCLUDE_DIRS}
-  PRIVATE
-    ${swri_roscpp_TARGETS})
+)
 
 target_compile_definitions(${PROJECT_NAME}
   PUBLIC
@@ -126,7 +124,7 @@ target_link_libraries(${PROJECT_NAME}_nodes
   ${rcl_interfaces_TARGETS}
   ${rclcpp_components_TARGETS}
   ${marti_nav_msgs_TARGETS}
-  ${swri_roscpp_TARGETS})
+)
 
 add_executable(lat_lon_tf_echo src/nodes/lat_lon_tf_echo.cpp)
 target_include_directories(lat_lon_tf_echo PUBLIC
@@ -145,6 +143,7 @@ target_link_libraries(lat_lon_tf_echo PUBLIC
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
+  find_package(ament_index_cpp REQUIRED)
   find_package(launch_testing_ament_cmake)
 
   ament_add_gtest_executable(transform_manager_test test/test_transform_manager.cpp)
@@ -173,6 +172,14 @@ if(BUILD_TESTING)
     ament_index_cpp::ament_index_cpp
     rclcpp::rclcpp
     tf2::tf2)
+  # ament_index_cpp::get_package_share_path (returns std::filesystem::path) is
+  # not available in Humble, which only provides get_package_share_directory
+  # (returns std::string). Newer distributions fall through to the default path
+  # and use get_package_share_path, avoiding the now-deprecated
+  # get_package_share_directory.
+  if ("$ENV{ROS_DISTRO}" STREQUAL "humble")
+    target_compile_definitions(georeference_test PRIVATE "-DUSE_LEGACY_AMENT_INDEX_API")
+  endif()
 
   ament_add_gtest(transform_util_test test/test_transform_util.cpp)
   target_link_libraries(transform_util_test
