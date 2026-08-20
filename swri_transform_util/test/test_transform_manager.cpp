@@ -539,7 +539,13 @@ int main(int argc, char **argv)
 
   _node = rclcpp::Node::make_shared("transform_manager_test");
   _tf_buffer = std::make_shared<tf2_ros::Buffer>(_node->get_clock());
+  // tf2_ros 0.46.1 removed the deprecated constructor overload that accepted a
+  // Node::SharedPtr, requiring a bare node reference instead.
+#if USE_NEW_TF2_ROS_CTORS
+  _tf_listener = std::make_shared<tf2_ros::TransformListener>(*_tf_buffer, *_node);
+#else
   _tf_listener = std::make_shared<tf2_ros::TransformListener>(*_tf_buffer, _node);
+#endif
 
   _tf_manager = std::make_shared<swri_transform_util::TransformManager>(_node, _tf_buffer);
 
