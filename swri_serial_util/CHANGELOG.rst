@@ -2,6 +2,9 @@
 Changelog for package swri_serial_util
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 3.9.0 (2026-06-02)
 ------------------
 

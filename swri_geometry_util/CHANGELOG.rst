@@ -2,6 +2,12 @@
 Changelog for package swri_geometry_util
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Removing unnecessary dependency on pkg-config (`#797 <https://github.com/swri-robotics/marti_common/issues/797>`_)
+* Handling self-intersecting polygons (`#793 <https://github.com/swri-robotics/marti_common/issues/793>`_)
+* Contributors: David Anthony
+
 3.9.0 (2026-06-02)
 ------------------
 
