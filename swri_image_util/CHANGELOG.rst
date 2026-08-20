@@ -2,8 +2,8 @@
 Changelog for package swri_image_util
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+3.9.1 (2026-08-19)
+------------------
 * Removing unnecessary dependency on pkg-config (`#797 <https://github.com/swri-robotics/marti_common/issues/797>`_)
 * Adding replace colors node for ROS 2 (`#796 <https://github.com/swri-robotics/marti_common/issues/796>`_)
 * Adding more robust package version compatibility checks (`#795 <https://github.com/swri-robotics/marti_common/issues/795>`_)
